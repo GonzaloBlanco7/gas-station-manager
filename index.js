@@ -1,20 +1,23 @@
 
 window.addEventListener('DOMContentLoaded', (event) => {
     let map = new MyMap('map_container');
-    console.log(map)
+    let stations = new Stations();
     
-    fetchData()
-        .then(data => {
-            console.log(data)
-            let stations_by_province = sortByProvince(data);
-            let provinces = Object.keys(stations_by_province).map(text => text.toLocaleLowerCase());
+    stations.init()
+    .then(() => {
+        console.log(stations.data)
+        let stations_by_province = stations.getByProvince();
+        let provinces = Object.keys(stations_by_province);
+        
+        let selected_provinces = ['PALENCIA'];
 
-
-            //Draw map
-            //map.setData(data.ListaEESSPrecio)
-            //map.addLayer('Gasolineras')
+        //Draw provinces
+        selected_provinces.forEach((province) => {
+            console.log(province, stations_by_province[province]);
+            map.addLayer(province, stations_by_province[province])
         });
+    });
+
+
+    //TODO: provinces modal actions
 });
-
-
-    

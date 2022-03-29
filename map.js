@@ -85,22 +85,40 @@ class MyMap {
         return layer;
     }
 
-    static newMarker(marker_info) {        
-        marker_info.coords = [
-            Number(marker_info['Latitud'].replace(',', '.')),
-            Number(marker_info['Longitud (WGS84)'].replace(',', '.'))
+    static newMarker(station) {        
+        station.coords = [
+            Number(station['Latitud'].replace(',', '.')),
+            Number(station['Longitud (WGS84)'].replace(',', '.'))
         ];
         
-        if ((Number(marker_info.coords[0]) == 0) || (Number(marker_info.coords[1]) == 0)) {
+        if ((Number(station.coords[0]) == 0) || (Number(station.coords[1]) == 0)) {
             return null; //no coords
         }
         
-        var marker = L.marker(marker_info.coords, {
+        var marker = L.marker(station.coords, {
             icon: L.icon({
                 iconUrl: 'images/icon.png',
             }),
         });
 
+        let prices = {};
+        Object.keys(station)
+            .filter((key) => key.includes('Precio'))
+            .forEach((key) => {
+                let name = key.replace('Precio', '').trim();
+                let value = Number(station[key].replace(',', '.'))
+                if (value == 0) return;
+                prices[name] = station[key];
+            });
+
+        let popup = `<strong>${station['Rótulo']}</strong>`;
+        Object.keys(prices).forEach((name) => {
+            popup += `<br>${name}: ${prices[name]} €/L`
+        })
+        popup += `<br><br><em>${station.Horario}</em>`
+
+        marker.bindPopup(popup);
+        
         return marker;
     }
 
