@@ -1,8 +1,9 @@
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    let map = new MyMap('map_container');
-    let stations = new Stations();
+    var map = new MyMap('map_container');
+    var stations = new Stations();
     displayLoader(true)
+
 
     stations.init()
     .then(() => {
@@ -21,29 +22,47 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
 
-    //On modal provinces open
+    //On provinces modal open
     document.getElementById('provincesModal').addEventListener('show.bs.modal', () => {
         let modal_body = document.querySelector('#provincesModal .modal-body');
         modal_body.innerHTML = '';
 
-
         let provinces = Object.keys(stations.getByProvince());
         provinces.forEach(province => {
-            let cb = document.createElement('input');
-            cb.type = 'checkbox';
-            cb.text = province;
-            cb.value = province;
-            modal_body.appendChild(cb);
+            let checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `province_${province}`;
+            checkbox.value = province;
+            
+            let label = document.createElement('label')
+            label.htmlFor = `province_${province}`;
+            label.appendChild(document.createTextNode(` ${province}`));
+
+            modal_body.appendChild(checkbox);
+            modal_body.appendChild(label);
+            modal_body.appendChild(document.createElement('br'));
         });
         
     })
 
     //On modal provinces accept
     document.getElementById('confirm_provinces_btn').addEventListener('click', () => {
-        let modal_body = document.querySelector('#provincesModal .modal-body');
-        console.log(modal_body)
+        let selected_checkboxs = document.querySelectorAll('#provincesModal .modal-body input[type=checkbox]:checked');
 
-
+        //Clear province layers
+        //map.clearLayers()
+        
+        //Add selected provinces
+        let stations_by_province = stations.getByProvince();
+        for (checkbox of selected_checkboxs) {
+            const province = checkbox.value
+            map.addLayer(province, stations_by_province[province])
+        }
+        
+        //Close modal
+        var myModalEl = document.getElementById('provincesModal');
+        var modal = bootstrap.Modal.getInstance(myModalEl)
+        modal.hide();
     })
 });
 
