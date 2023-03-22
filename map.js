@@ -19,6 +19,7 @@ class MyMap {
 
 
     init() {
+        /*
         const OSM_layer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
@@ -27,11 +28,12 @@ class MyMap {
             maxZoom: 18,
             subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
         });
+        */
         const google_hybrid_layer = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
             maxZoom: 18,
             subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
         });
-        console.log(this.container_id);
+
         this.map = L.map(this.container_id, {
             center: [40.1, -4],
             zoom: 6.5, //almost all spain
@@ -60,7 +62,7 @@ class MyMap {
     }
 
     clearLayers() {
-        this.layers.forEach(function (layer) {
+        this.layers.forEach(layer => {
             this.map.removeLayer(layer);
             this.control.removeLayer(layer);
         });
@@ -71,7 +73,7 @@ class MyMap {
         let marker_list = [];
 
         //create all markers
-        data.forEach(function (marker) {
+        data.forEach(marker => {
             let new_marker = MyMap.newMarker(marker);
             if (new_marker === null) {
                 return;
@@ -112,7 +114,7 @@ class MyMap {
             });
 
         let popup = `<strong>${station['Rótulo']}</strong>`;
-        Object.keys(prices).forEach((name) => {
+        Object.keys(prices).forEach(name => {
             popup += `<br>${name}: ${prices[name]} €/L`
         })
         popup += `<br><br><em>${station.Horario}</em>`
@@ -138,7 +140,7 @@ function applyFilter() {
 
     //FILTER
     const text = input.toLowerCase();
-    var filtered_supplypoints = supplypoints.filter(function (sp) {
+    var filtered_supplypoints = supplypoints.filter(sp => {
         const all_data = sp.all_data.toLowerCase();
         return all_data.includes(text);
     })

@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         let selected_provinces = ['PALENCIA'];
 
         //Draw provinces
-        selected_provinces.forEach((province) => {
+        selected_provinces.forEach(province => {
             console.log(province, stations_by_province[province]);
             map.addLayer(province, stations_by_province[province])
         });
@@ -50,7 +50,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         let selected_checkboxs = document.querySelectorAll('#provincesModal .modal-body input[type=checkbox]:checked');
 
         //Clear province layers
-        //map.clearLayers()
+        map.clearLayers()
         
         //Add selected provinces
         let stations_by_province = stations.getByProvince();
